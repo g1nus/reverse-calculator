@@ -20,6 +20,18 @@ function getRandomOperator() : string{
   return (getRandomInt(2) < 1) ? "-" : "+";
 }
 
+function getNumberOfLifes(array : number[]) : number {
+  return array.filter((x : number) => x === 1).length;
+}
+
+function removeLife(array:number[]) : number[] {
+  let n = getNumberOfLifes(array) - 1;
+  if(n >= 0){
+    array[n] = 0;
+  }
+  return [...array];
+}
+
 function generateProblem(maxNum : number) : Problem {
   let totalElements : number = 2 + getRandomInt(2);
   let operators : string[] = [getRandomOperator(), "+"];
@@ -51,6 +63,7 @@ export default function Counter() {
   const [problem, setProblem] = useState<Problem>({content: "6 + 4", solution: 10});
   const [hasStarted, setHasStarted] = useState<Boolean>(false);
   const [nLifes, setNLifes] = useState<number[]>([1,1,1]);
+  const nLifesRef = useRef<number[]>(nLifes);
   const [nProblems, setNProblems] = useState<number>(1);
   const timerNode = useRef<HTMLDivElement>(null);
 
@@ -58,12 +71,29 @@ export default function Counter() {
   const currAnimation = useRef<Animation>();
 
   useEffect(() => {
-    console.log("trigger effect");
-    if(hasStarted){
+    nLifesRef.current = nLifes;
+  }, [nLifes]);
+
+  useEffect(() => {
+    console.log("trigger effect, nLifes = ", nLifesRef.current);
+    if(hasStarted && getNumberOfLifes(nLifesRef.current) > 0){
       if(timerNode.current){
+        console.log("setting animation");
         currAnimation.current = timerNode.current.animate([{ transform: "scaleX(0)" }], {duration: 10000, iterations: 1, fill: "forwards"});
         timer.current = setTimeout(() => {
-          console.log("Failed to solve problem in time!");
+          console.log("Failed to solve problem in time! nLifes = ", nLifesRef.current);
+          if(getNumberOfLifes(nLifesRef.current) > 1){
+            console.log("removing life")
+            currAnimation.current?.cancel();
+            setNLifes(removeLife(nLifesRef.current));
+            setResult("");
+            setProblem(generateProblem(100));
+            setNProblems(nProblems+1);
+          }else{
+            setNLifes(removeLife(nLifesRef.current));
+            console.log("GAME OVER!! (from timeout)");
+            currAnimation.current?.finish();
+          }
         }, 10000);
       }
     }else{
@@ -76,7 +106,7 @@ export default function Counter() {
     <div>
       <p>
         life: {nLifes.map((x, i) =>
-          <span key={i}> {(x === 1) ? "❤️" : "💔"} </span>
+          <span key={i}> {(x === 1) ? "❤️" : "O"} </span>
         )}
       </p>
       {numbers.map((el : (number | string), idx : number) => {
@@ -84,15 +114,31 @@ export default function Counter() {
             case "=": return(
               <button key={idx} className={style.button} onClick={() => {
                 //console.log(currAnimation);
-                if(currAnimation.current){
-                  currAnimation.current?.cancel();
-                }else{
-                  console.log("WARNING!! The animation is not defined")
-                }
-                setNProblems(nProblems+1);
-                if(parseInt(result) == problem.solution){
+                if(parseInt(result) == problem.solution && getNumberOfLifes(nLifes) > 0){
+                  if(currAnimation.current){
+                    currAnimation.current?.cancel();
+                  }else{
+                    console.log("WARNING!! The animation is not defined")
+                  }
                   setResult("");
                   setProblem(generateProblem(100));
+                  setNProblems(nProblems+1);
+                }else{
+                  console.log("wrong answer!");
+                  if(getNumberOfLifes(nLifes) > 1){
+                    console.log("removing life")
+                    setNLifes(removeLife(nLifes));
+                  }else{
+                    console.log("removing life")
+                    setNLifes(removeLife(nLifes));
+                    if(currAnimation.current){
+                      currAnimation.current.finish();
+                    }else{
+                      console.log("WARNING!! The animation is not defined")
+                    }
+                    console.log("GAME OVER!! (from wrong answer)");
+                    clearInterval(timer.current);
+                  }
                 }
               }}>{el}</button>
             );
