@@ -14,4 +14,5 @@
   width: 300px;
   height: 15px;
   background-color: brown;
+  transform-origin: left;
 }

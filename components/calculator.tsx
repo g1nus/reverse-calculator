@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import style from '@/app/style.module.css';
 import { Problem } from '@/types/main';
 
@@ -49,31 +49,50 @@ export default function Counter() {
   const [numbers, setNumbers] = useState<(number | string)[]>([0,1,2,3,4,5,6,7,8,9,"c","="]);
   const [result, setResult] = useState<string>("");
   const [problem, setProblem] = useState<Problem>({content: "6 + 4", solution: 10});
-  const [shrinkTime, setShrinkTime] = useState<number>(10);
-  const [shouldTranslate, setShouldTranslate] = useState<Boolean>(false);
+  const [hasStarted, setHasStarted] = useState<Boolean>(false);
+  const [nLifes, setNLifes] = useState<number[]>([1,1,1]);
+  const [nProblems, setNProblems] = useState<number>(1);
+  const timerNode = useRef<HTMLDivElement>(null);
+
+  const timer = useRef<any>();
+  const currAnimation = useRef<Animation>();
 
   useEffect(() => {
-    console.log("setting timeout!");
-    setShouldTranslate(true);
-    setShrinkTime(10);
-    const timer = setTimeout(() => {
-      console.log("Hello, World!");
-      setShouldTranslate(false);
-      setProblem(generateProblem(100));
-    }, 10000);
-    return () => clearTimeout(timer);
-  }, [problem]);
+    console.log("trigger effect");
+    if(hasStarted){
+      if(timerNode.current){
+        currAnimation.current = timerNode.current.animate([{ transform: "scaleX(0)" }], {duration: 10000, iterations: 1, fill: "forwards"});
+        timer.current = setTimeout(() => {
+          console.log("Failed to solve problem in time!");
+        }, 10000);
+      }
+    }else{
+      console.log("the game is not started yet");
+    }
+    return () => {if (hasStarted) {clearInterval(timer.current)}};
+  }, [hasStarted, nProblems]);
 
   return (
     <div>
+      <p>
+        life: {nLifes.map((x, i) =>
+          <span key={i}> {(x === 1) ? "❤️" : "💔"} </span>
+        )}
+      </p>
       {numbers.map((el : (number | string), idx : number) => {
           switch(el){
             case "=": return(
               <button key={idx} className={style.button} onClick={() => {
+                //console.log(currAnimation);
+                if(currAnimation.current){
+                  currAnimation.current?.cancel();
+                }else{
+                  console.log("WARNING!! The animation is not defined")
+                }
+                setNProblems(nProblems+1);
                 if(parseInt(result) == problem.solution){
                   setResult("");
                   setProblem(generateProblem(100));
-                  setShouldTranslate(false);
                 }
               }}>{el}</button>
             );
@@ -86,6 +105,9 @@ export default function Counter() {
             );
             default: return(
               <button key={idx} className={style.button} onClick={() => {
+                if(!hasStarted){
+                  setHasStarted(true);
+                }
                 if(result.length > 0 || el != 0){
                   setResult(result + el);
                 }
@@ -105,10 +127,9 @@ export default function Counter() {
       <button onClick={() => {
         setProblem(generateProblem(100));
       }}>new problem</button>
+            
       <div className={style.timer_holder}>
-        <div className={style.timer_content} style={{
-          transition : (shouldTranslate ? "10s": "0s") + " linear", width: (shouldTranslate ? "0px" : "300px")
-        }}></div>
+        <div className={style.timer_content} ref={timerNode}></div>
       </div>
     </div>
   );
