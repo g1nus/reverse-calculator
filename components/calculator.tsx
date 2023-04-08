@@ -3,104 +3,117 @@
 import { useEffect, useState, useRef } from 'react';
 import style from '@/app/style.module.css';
 import { Problem } from '@/types/main';
-
-function shuffleArray(array : (number | string)[]) : (number | string)[] {
-  for (let i : number = array.length - 1; i > 0; i--) {
-    const j : number = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
-}
-
-function getRandomInt(max : number) : number{
-  return Math.floor(Math.random() * max);
-}
-
-function getRandomOperator() : string{
-  return (getRandomInt(2) < 1) ? "-" : "+";
-}
-
-function getNumberOfLifes(array : number[]) : number {
-  return array.filter((x : number) => x === 1).length;
-}
-
-function removeLife(array:number[]) : number[] {
-  let n = getNumberOfLifes(array) - 1;
-  if(n >= 0){
-    array[n] = 0;
-  }
-  return [...array];
-}
-
-function generateProblem(maxNum : number) : Problem {
-  let totalElements : number = 2 + getRandomInt(2);
-  let operators : string[] = [getRandomOperator(), "+"];
-  let numbers : number[] = [];
-  let problemString : string = "";
-  let problemSolution : number = 0;
-
-  for (let i : number = 0; i < totalElements; i++){
-    let value : number = 1 + getRandomInt(maxNum);
-    numbers.push(value);
-  }
-  numbers.sort((a : number,b : number) : number => b - a);
-  for (let i : number = 0; i < totalElements; i++){
-    if(i == 0){
-      problemSolution = numbers[i];
-      problemString = problemString + numbers[i];
-    }else{
-      problemSolution = problemSolution + ((operators[i-1] == "+") ? +(numbers[i]) : -(numbers[i]));
-      problemString = problemString + ` ${operators[i-1]} ${numbers[i]}`;
-    }
-  }
-  return {content: problemString, solution: problemSolution};
-
-}
+import { shuffleArray, getNumberOfLifes, removeLife, generateProblem } from '@/utils/main';
 
 export default function Counter() {
+  // manages the calculator keyboard
   const [numbers, setNumbers] = useState<(number | string)[]>([0,1,2,3,4,5,6,7,8,9,"c","="]);
+  // manages the typed result
   const [result, setResult] = useState<string>("");
-  const [problem, setProblem] = useState<Problem>({content: "6 + 4", solution: 10});
+  // keeps track of the problem to solve
+  const [problem, setProblem] = useState<Problem>({content: "5 + 5", solution: 10});
+  // flag for starting the game (as soon as the first number is typed)
   const [hasStarted, setHasStarted] = useState<Boolean>(false);
+  // keeps track of the three available lifes
   const [nLifes, setNLifes] = useState<number[]>([1,1,1]);
+  // reference to use inside of timeout for the life
   const nLifesRef = useRef<number[]>(nLifes);
+  // keeps track of the number of problems seen, mostly used for triggering the timeout when a new problem is rendered
   const [nProblems, setNProblems] = useState<number>(1);
-  const timerNode = useRef<HTMLDivElement>(null);
 
+  // html node displaying the timer animation
+  const timerNode = useRef<HTMLDivElement>(null);
+  // actual timeout variable
   const timer = useRef<any>();
+  // animation variable for managing start, clear and finish
   const currAnimation = useRef<Animation>();
 
+  // effect used for tracking the lifes inside the references
   useEffect(() => {
     nLifesRef.current = nLifes;
   }, [nLifes]);
 
+  // effect for managing the answer countdown, triggered on hasStarted and nProblems update
   useEffect(() => {
     console.log("trigger effect, nLifes = ", nLifesRef.current);
+
+    // timeout logic can be executed only if the game has started and there's at least one life left
     if(hasStarted && getNumberOfLifes(nLifesRef.current) > 0){
+      // safety check: the HTML node representing the times must be defined
       if(timerNode.current){
         console.log("setting animation");
+        // start animation
         currAnimation.current = timerNode.current.animate([{ transform: "scaleX(0)" }], {duration: 10000, iterations: 1, fill: "forwards"});
+        
+        // and trigger timeout at the end of the animation time
         timer.current = setTimeout(() => {
           console.log("Failed to solve problem in time! nLifes = ", nLifesRef.current);
+          // if the user has some lifes left then remove 1 life
           if(getNumberOfLifes(nLifesRef.current) > 1){
             console.log("removing life")
+            // cancel animation (should be defined)
             currAnimation.current?.cancel();
             setNLifes(removeLife(nLifesRef.current));
             setResult("");
             setProblem(generateProblem(100));
+            // increase number of problems, to trigger effect for timeout again
             setNProblems(nProblems+1);
+          // otherwise it's game over
           }else{
+            // remove last life
             setNLifes(removeLife(nLifesRef.current));
             console.log("GAME OVER!! (from timeout)");
+            // stop timer animation
             currAnimation.current?.finish();
           }
         }, 10000);
+
       }
     }else{
-      console.log("the game is not started yet");
+      console.log("the game is not started yet or no more lifes left");
     }
+
+    // clear interval on unmount
     return () => {if (hasStarted) {clearInterval(timer.current)}};
   }, [hasStarted, nProblems]);
+
+  // this function manages the logic of submitting an answer
+  function submitAnswer(){
+    //console.log(currAnimation);
+
+    // if the solution is right and there are still lifes left
+    if(parseInt(result) == problem.solution && getNumberOfLifes(nLifes) > 0){
+      // safety check (the animation should be defined)
+      if(currAnimation.current){
+        // cancel the timer animation
+        currAnimation.current.cancel();
+      }else{
+        console.log("WARNING!! The animation is not defined")
+      }
+
+      // reset to a new problem and increment the number of poblems to trigger a new run of the timer effect
+      setResult("");
+      setProblem(generateProblem(100));
+      setNProblems(nProblems+1);
+    
+    // otherwise it's a wrong answer, execute logic only if there are lifes left
+    }else if(getNumberOfLifes(nLifes) > 0){
+      console.log("wrong answer!");
+      console.log("removing life")
+      setNLifes(removeLife(nLifes));
+
+      // check for gameover case
+      if(getNumberOfLifes(nLifes) === 0){
+        if(currAnimation.current){
+          currAnimation.current.finish();
+        }else{
+          console.log("WARNING!! The animation is not defined")
+        }
+        console.log("GAME OVER!! (from wrong answer)");
+        clearInterval(timer.current);
+      }
+    }
+  }
 
   return (
     <div>
@@ -112,35 +125,7 @@ export default function Counter() {
       {numbers.map((el : (number | string), idx : number) => {
           switch(el){
             case "=": return(
-              <button key={idx} className={style.button} onClick={() => {
-                //console.log(currAnimation);
-                if(parseInt(result) == problem.solution && getNumberOfLifes(nLifes) > 0){
-                  if(currAnimation.current){
-                    currAnimation.current?.cancel();
-                  }else{
-                    console.log("WARNING!! The animation is not defined")
-                  }
-                  setResult("");
-                  setProblem(generateProblem(100));
-                  setNProblems(nProblems+1);
-                }else{
-                  console.log("wrong answer!");
-                  if(getNumberOfLifes(nLifes) > 1){
-                    console.log("removing life")
-                    setNLifes(removeLife(nLifes));
-                  }else{
-                    console.log("removing life")
-                    setNLifes(removeLife(nLifes));
-                    if(currAnimation.current){
-                      currAnimation.current.finish();
-                    }else{
-                      console.log("WARNING!! The animation is not defined")
-                    }
-                    console.log("GAME OVER!! (from wrong answer)");
-                    clearInterval(timer.current);
-                  }
-                }
-              }}>{el}</button>
+              <button key={idx} className={style.button} onClick={submitAnswer}>{el}</button>
             );
             case "c": return(
               <button key={idx} className={style.button} onClick={() => {
