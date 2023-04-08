@@ -1,0 +1,74 @@
+.button{
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  border: solid 1px red;
+}
+.timer_holder{
+  width: calc(100% - 40px);
+  height: 15px;
+  border: solid 1px green;
+}
+.timer_content{
+  width: 100%;
+  height: 15px;
+  background-color: brown;
+  transform-origin: left;
+}
+
+.calculator_frame{
+  width: 300px;
+  height: 400px;
+  background-color: aliceblue;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.life_holder{
+  width: 100%;
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+}
+
+.life_heart{
+  height: 20px;
+  width: 20px;
+  border: solid 1px black; 
+}
+
+.buttons_holder{
+  width: calc(100% - 10px);
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+}
+
+.button_item{
+  width: 27%;
+  aspect-ratio: 1 / 1;
+  border: solid 1px red;
+  margin: 3px 0px 3px 0px;
+}
+
+.display{
+  width: calc(100% - 10px);
+  min-height: 30px;
+  border: solid 1px green;
+  text-align: center;
+}
+
+@supports not (aspect-ratio: 1 / 1) {
+  .element::before {
+    float: left;
+    padding-top: 100%;
+    content: "";
+  }
+
+  .element::after {
+    display: block;
+    content: "";
+    clear: both;
+  }
+}
