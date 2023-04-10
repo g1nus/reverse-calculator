@@ -4,7 +4,12 @@ import { useEffect, useState, useRef } from 'react';
 import style from '@/app/calculator.module.css';
 import { Problem } from '@/types/main';
 import { shuffleArray, getNumberOfLifes, removeLife, generateProblem } from '@/utils/main';
+import Heart from './heart';
 
+
+//============================================
+// 
+//============================================
 export default function Counter() {
   // manages the calculator keyboard
   const [numbers, setNumbers] = useState<(number | string)[]>([1,2,3,4,5,6,7,8,9,"c",0,"="]);
@@ -119,7 +124,7 @@ export default function Counter() {
     <div className={style.calculator_frame}>
       <div className={style.life_holder}>
         {nLifes.map((x, i) =>
-          <div className={style.life_heart} key={i}> {(x === 1) ? "❤️" : "O"} </div>
+          <div className={style.life_heart} key={i}> <Heart alive={x === 1}/> </div>
         )}
       </div>
       <div className={style.timer_holder}>
@@ -143,7 +148,7 @@ export default function Counter() {
               );
               default: return(
                 <button key={idx} className={style.button_item} onClick={() => {
-                  if(!hasStarted){
+                  if(!hasStarted && el != 0){
                     setHasStarted(true);
                   }
                   if(result.length > 0 || el != 0){

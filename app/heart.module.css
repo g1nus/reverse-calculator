@@ -1,0 +1,29 @@
+@keyframes rotate-right {
+    0% {transform: rotate(0deg) translateY(0px);}
+    100% {transform: rotate(40deg) translateY(30px);}
+}
+@keyframes rotate-left {
+    0% {transform: rotate(0deg) translateY(0px);}
+    100% {transform: rotate(-40deg) translateY(30px);}
+}
+@keyframes disappear{
+    0% {opacity: 1.0;}
+    100% {opacity: 0.0;}
+}
+
+.cls_1,.cls_2{fill:none;stroke-miterlimit:10;stroke-width: 20px;}
+.cls_1{stroke:#000; fill: #000;}
+.cls_2{stroke: none; fill: none}
+
+.of{
+  overflow: visible;
+}
+
+.right_animate{
+    animation: .8s cubic-bezier(.36,.01,.85,.57) 0s 1 forwards rotate-right, .7s linear 0s 1 forwards disappear;
+    transform-origin: 457px 930px;
+}
+.left_animate{
+    animation: .8s cubic-bezier(.36,.01,.85,.57) 0s 1 forwards rotate-left, .7s linear 0s 1 forwards disappear;
+    transform-origin: 543px 930px;
+}
