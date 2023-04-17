@@ -8,7 +8,7 @@ import Heart from './heart';
 
 
 //============================================
-// 
+// fix life loss animation (faster)
 //============================================
 export default function Counter() {
   // manages the calculator keyboard

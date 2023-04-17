@@ -20,10 +20,10 @@
 }
 
 .right_animate{
-    animation: .8s cubic-bezier(.36,.01,.85,.57) 0s 1 forwards rotate-right, .7s linear 0s 1 forwards disappear;
+    animation: .4s cubic-bezier(.36,.01,.85,.57) 0s 1 forwards rotate-right, .2s linear 0s 1 forwards disappear;
     transform-origin: 457px 930px;
 }
 .left_animate{
-    animation: .8s cubic-bezier(.36,.01,.85,.57) 0s 1 forwards rotate-left, .7s linear 0s 1 forwards disappear;
+    animation: .4s cubic-bezier(.36,.01,.85,.57) 0s 1 forwards rotate-left, .2s linear 0s 1 forwards disappear;
     transform-origin: 543px 930px;
 }
