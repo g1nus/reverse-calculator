@@ -131,7 +131,7 @@ export default function Counter() {
         <div className={style.timer_content} ref={timerNode}></div>
       </div>
       <div className={style.display}>
-        <p>{result}</p>
+        <p>{result.split('').map((c, i) => <span key={i} className={style.new_char}>{c}</span>)}</p>
       </div>
       <div className={style.buttons_holder}>
         {numbers.map((el : (number | string), idx : number) => {
