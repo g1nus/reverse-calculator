@@ -2,24 +2,26 @@
 
 import { useEffect, useState, useRef } from 'react';
 import style from '@/app/calculator.module.css';
-import { Problem } from '@/types/main';
-import { shuffleArray, getNumberOfLifes, removeLife, generateProblem } from '@/utils/main';
+import { Problem, SolutionNumber } from '@/types/main';
+import { shuffleArray, getNumberOfLifes, removeLife, generateProblem, getSolutionValue, compareSolutions } from '@/utils/main';
 import Heart from './heart';
 import CalcButton from './calcButton';
+import NumberItem from './numberItem';
 
 
 //============================================
-// add animation on wrong answer
+// fill up display with problem (set an absolute overlay over the display and then move it accordingly)
 // style fonts, colors and proportions
 // add levels
 // add music
 // make responsive
+// fix types "any"
 //============================================
 export default function Counter() {
   // manages the calculator keyboard
   const [numbers, setNumbers] = useState<(number | string)[]>([1,2,3,4,5,6,7,8,9,"c",0,"="]);
   // manages the typed result
-  const [result, setResult] = useState<string>("");
+  const [result, setResult] = useState<SolutionNumber[]>([]);
   // keeps track of the problem to solve
   const [problem, setProblem] = useState<Problem>({content: "5 + 5", solution: 10});
   // flag for starting the game (as soon as the first number is typed)
@@ -64,7 +66,7 @@ export default function Counter() {
             // cancel animation (should be defined)
             currAnimation.current?.cancel();
             setNLifes(removeLife(nLifesRef.current));
-            setResult("");
+            setResult([]);
             setProblem(generateProblem(100));
             // increase number of problems, to trigger effect for timeout again
             setNProblems(nProblems+1);
@@ -89,10 +91,11 @@ export default function Counter() {
 
   // this function manages the logic of submitting an answer
   function submitAnswer(){
+    let currentResult : number = getSolutionValue(result);
     //console.log(currAnimation);
 
-    // if the solution is right and there are still lifes left
-    if(parseInt(result) == problem.solution && getNumberOfLifes(nLifes) > 0){
+    // if the solution is a number and it's right and there are still lifes left
+    if(!isNaN(currentResult) && currentResult == problem.solution && getNumberOfLifes(nLifes) > 0){
       // safety check (the animation should be defined)
       if(currAnimation.current){
         // cancel the timer animation
@@ -102,13 +105,21 @@ export default function Counter() {
       }
 
       // reset to a new problem and increment the number of poblems to trigger a new run of the timer effect
-      setResult("");
+      setResult([]);
       setProblem(generateProblem(100));
       setNProblems(nProblems+1);
     
     // otherwise it's a wrong answer, execute logic only if there are lifes left
-    }else if(getNumberOfLifes(nLifes) > 0){
-      console.log("wrong answer!");
+    }else if(!isNaN(currentResult) && getNumberOfLifes(nLifes) > 0 && hasStarted){
+      let wrongNumbers : number[] = compareSolutions(problem.solution, currentResult);
+      let newResultFormat = result;
+      wrongNumbers.map((i) => {
+        newResultFormat[i].flash = !newResultFormat[i].flash;
+      })
+      setResult(newResultFormat);
+
+
+      console.log("wrong answer!", wrongNumbers);
       console.log("removing life")
       setNLifes(removeLife(nLifes));
 
@@ -126,17 +137,27 @@ export default function Counter() {
   }
 
   function addNumber(e : (number | string)){
+    let num : number;
+    if(typeof e === "number"){
+      num = e;
+    }else{
+      num = parseInt(e);
+    }
     if(!hasStarted && e != 0){
       setHasStarted(true);
     }
     if(result.length > 0 || e != 0){
-      setResult(result + e);
+      let newSolution = [...result];
+      newSolution.push({content: num, flash: false});
+      setResult(newSolution);
     }
   }
 
   function deleteNumber(){
-    if(result != ""){
-      setResult(result.substring(0, result.length - 1));
+    if(result.length > 0){
+      let newSolution = [...result];
+      let popped = newSolution.pop();
+      setResult(newSolution);
     }
   }
 
@@ -151,7 +172,7 @@ export default function Counter() {
         <div className={style.timer_content} ref={timerNode}></div>
       </div>
       <div className={style.display}>
-        <p>{result.split('').map((c, i) => <span key={i} className={style.new_char}>{c}</span>)}</p>
+        <p>{result.map((c, i) => <NumberItem key={i} item={c}/>)}</p>
       </div>
       <div className={style.buttons_holder}>
         {numbers.map((el : (number | string), idx : number) => <CalcButton key={idx} el={el} submitAnswer={submitAnswer} deleteNumber={deleteNumber} addNumber={addNumber}/>)}

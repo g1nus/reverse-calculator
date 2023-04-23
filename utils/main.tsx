@@ -1,4 +1,4 @@
-import { Problem } from "@/types/main";
+import { Problem, SolutionNumber } from "@/types/main";
 
 function getRandomInt(max : number) : number{
   return Math.floor(Math.random() * max);
@@ -51,4 +51,40 @@ export function generateProblem(maxNum : number) : Problem {
   }
   return {content: problemString, solution: problemSolution};
 
+}
+
+export function getSolutionValue(solution: SolutionNumber[]) : number{
+  let stringValue = "";
+  for(let i : number = 0; i < solution.length; i++){
+    stringValue += solution[i].content;
+  }
+  return parseInt(stringValue);
+}
+
+export function compareSolutions(solution: number, answer: number) : number[] {
+  let wrongNumbers : number[] = [];
+  let solutionArray : string[] = solution.toString().split(''); 
+  let answerArray : string[] = answer.toString().split(''); 
+
+  solutionArray.map((el, idx) => {
+    if(idx < answerArray.length && el != answerArray[idx]){
+      wrongNumbers.push(idx);
+    }
+  })
+
+  if(answerArray.length > solutionArray.length){
+    for(let i : number = solutionArray.length; i < answerArray.length; i++){
+      wrongNumbers.push(i);
+    }
+  }
+
+  if(answerArray.length < solutionArray.length){
+    for(let i : number = 0; i < answerArray.length; i++){
+      if(!wrongNumbers.includes(i)){
+        wrongNumbers.push(i);
+      }
+    }
+  }
+
+  return wrongNumbers;
 }
