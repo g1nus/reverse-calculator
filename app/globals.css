@@ -14,3 +14,17 @@ body {
   align-items: center;
   justify-content: center;
 }
+
+@supports not (aspect-ratio: 1 / 1) {
+  .element::before {
+    float: left;
+    padding-top: 100%;
+    content: "";
+  }
+
+  .element::after {
+    display: block;
+    content: "";
+    clear: both;
+  }
+}

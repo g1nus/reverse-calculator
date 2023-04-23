@@ -5,10 +5,15 @@ import style from '@/app/calculator.module.css';
 import { Problem } from '@/types/main';
 import { shuffleArray, getNumberOfLifes, removeLife, generateProblem } from '@/utils/main';
 import Heart from './heart';
+import CalcButton from './calcButton';
 
 
 //============================================
-// fix life loss animation (faster)
+// add animation on wrong answer
+// style fonts, colors and proportions
+// add levels
+// add music
+// make responsive
 //============================================
 export default function Counter() {
   // manages the calculator keyboard
@@ -120,6 +125,21 @@ export default function Counter() {
     }
   }
 
+  function addNumber(e : (number | string)){
+    if(!hasStarted && e != 0){
+      setHasStarted(true);
+    }
+    if(result.length > 0 || e != 0){
+      setResult(result + e);
+    }
+  }
+
+  function deleteNumber(){
+    if(result != ""){
+      setResult(result.substring(0, result.length - 1));
+    }
+  }
+
   return (
     <div className={style.calculator_frame}>
       <div className={style.life_holder}>
@@ -134,31 +154,7 @@ export default function Counter() {
         <p>{result.split('').map((c, i) => <span key={i} className={style.new_char}>{c}</span>)}</p>
       </div>
       <div className={style.buttons_holder}>
-        {numbers.map((el : (number | string), idx : number) => {
-            switch(el){
-              case "=": return(
-                <button key={idx} className={style.button_item} onClick={submitAnswer}>{el}</button>
-              );
-              case "c": return(
-                <button key={idx} className={style.button_item} onClick={() => {
-                  if(result != ""){
-                    setResult(result.substring(0, result.length - 1));
-                  }
-                }}>{el}</button>
-              );
-              default: return(
-                <button key={idx} className={style.button_item} onClick={() => {
-                  if(!hasStarted && el != 0){
-                    setHasStarted(true);
-                  }
-                  if(result.length > 0 || el != 0){
-                    setResult(result + el);
-                  }
-                }}>{el}</button>
-              );
-            }
-          }
-        )}
+        {numbers.map((el : (number | string), idx : number) => <CalcButton key={idx} el={el} submitAnswer={submitAnswer} deleteNumber={deleteNumber} addNumber={addNumber}/>)}
       </div>
       <button onClick={() => {
         setNumbers(shuffleArray([0,1,2,3,4,5,6,7,8,9,"c","="]))
