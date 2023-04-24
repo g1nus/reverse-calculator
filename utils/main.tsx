@@ -49,7 +49,7 @@ export function generateProblem(maxNum : number) : Problem {
       problemString = problemString + ` ${operators[i-1]} ${numbers[i]}`;
     }
   }
-  return {content: problemString, solution: problemSolution};
+  return {content: problemString, solution: problemSolution, display: true};
 
 }
 

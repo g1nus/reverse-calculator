@@ -40,6 +40,10 @@
   justify-content: space-around;
 }
 
+.problem_holder{
+  font-size: 15px;
+}
+
 .display{
   width: calc(100% - 10px);
   border: solid 1px grey;
@@ -49,7 +53,7 @@
   margin: 0px auto 10px auto;
 }
 
-.display p:empty::before {
+.display p:empty::before, .problem_holder p:empty::before {
   content:"";
   display:inline-block;
 }

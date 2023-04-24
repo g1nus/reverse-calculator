@@ -23,7 +23,7 @@ export default function Counter() {
   // manages the typed result
   const [result, setResult] = useState<SolutionNumber[]>([]);
   // keeps track of the problem to solve
-  const [problem, setProblem] = useState<Problem>({content: "5 + 5", solution: 10});
+  const [problem, setProblem] = useState<Problem>({content: "5 + 5", solution: 10, display: true});
   // flag for starting the game (as soon as the first number is typed)
   const [hasStarted, setHasStarted] = useState<Boolean>(false);
   // keeps track of the three available lifes
@@ -147,6 +147,7 @@ export default function Counter() {
       setHasStarted(true);
     }
     if(result.length > 0 || e != 0){
+      setProblem({...problem, display: false});
       let newSolution = [...result];
       newSolution.push({content: num, flash: false});
       setResult(newSolution);
@@ -171,8 +172,11 @@ export default function Counter() {
       <div className={style.timer_holder}>
         <div className={style.timer_content} ref={timerNode}></div>
       </div>
+      <div className={style.problem_holder}>
+        <p>{problem.content}</p>
+      </div>
       <div className={style.display}>
-        <p>{result.map((c, i) => <NumberItem key={i} item={c}/>)}</p>
+        <p>{!problem.display ? result.map((c, i) => <NumberItem key={i} item={c}/>) : problem.content}</p>
       </div>
       <div className={style.buttons_holder}>
         {numbers.map((el : (number | string), idx : number) => <CalcButton key={idx} el={el} submitAnswer={submitAnswer} deleteNumber={deleteNumber} addNumber={addNumber}/>)}
@@ -182,7 +186,7 @@ export default function Counter() {
       }}>shuffle</button>
       <hr></hr>
       <p>
-        ["string" : {problem.content}, "solution" : {problem.solution}]
+        ["string" : {problem.content}, "solution" : {problem.solution}, "display": {problem.display ? "true" : "false"}]
       </p>
 
       {/* <button onClick={() => {
