@@ -1,3 +1,17 @@
+@keyframes appear-problem{
+  0% {opacity: 0.0;}
+  100% {opacity: 1.0;}
+}
+@keyframes shift-upwards-problem{
+  0% {transform: translateY(12px) scale(1.2);}
+  100% {transform: translateY(0px) scale(1.0);}  
+}
+
+@keyframes scale-down-problem{
+  0% {transform: scale(1.2);}
+  100% {transform: scale(1.0);}  
+}
+
 .timer_holder{
   margin: 5px auto 10px auto;
   min-height: 5px;
@@ -41,8 +55,15 @@
 }
 
 .problem_holder{
-  font-size: 15px;
+  font-size: 18px;
+  margin: 0px 0px 5px 0px;
 }
+
+.problem_holder_content{
+  transform: translateY(12px) scale(1.2);
+  animation: 0.2s linear 0s 1 forwards shift-upwards-problem;
+}
+
 
 .display{
   width: calc(100% - 10px);
@@ -50,7 +71,7 @@
   border-radius: 3px 3px 3px 3px;
   text-align: center;
   font-size: 30px;
-  margin: 0px auto 10px auto;
+  margin: 0px auto 20px auto;
 }
 
 .display p:empty::before, .problem_holder p:empty::before {

@@ -10,7 +10,6 @@ import NumberItem from './numberItem';
 
 
 //============================================
-// fill up display with problem (set an absolute overlay over the display and then move it accordingly)
 // style fonts, colors and proportions
 // add levels
 // add music
@@ -55,7 +54,7 @@ export default function Counter() {
       if(timerNode.current){
         console.log("setting animation");
         // start animation
-        currAnimation.current = timerNode.current.animate([{ transform: "scaleX(0)" }], {duration: 10000, iterations: 1, fill: "forwards"});
+        currAnimation.current = timerNode.current.animate([{ transform: "scaleX(0)" }], {duration: 100000, iterations: 1, fill: "forwards"});
         
         // and trigger timeout at the end of the animation time
         timer.current = setTimeout(() => {
@@ -78,7 +77,7 @@ export default function Counter() {
             // stop timer animation
             currAnimation.current?.finish();
           }
-        }, 10000);
+        }, 100000);
 
       }
     }else{
@@ -173,7 +172,7 @@ export default function Counter() {
         <div className={style.timer_content} ref={timerNode}></div>
       </div>
       <div className={style.problem_holder}>
-        <p>{problem.content}</p>
+        {!problem.display ? <p className={style.problem_holder_content}>{problem.content}</p> : <p></p>}
       </div>
       <div className={style.display}>
         <p>{!problem.display ? result.map((c, i) => <NumberItem key={i} item={c}/>) : problem.content}</p>
