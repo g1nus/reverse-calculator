@@ -24,12 +24,14 @@ export default function CalcButton({el, submitAnswer, deleteNumber, addNumber} :
 
   return(
     <div className={style.button_item_holder} onMouseLeave={unpress}>
-      <div className={style.button_back}/>
+      <div className={style.button_mid}/>
       {{
-        '=': <button className={style.button_item} onMouseDown={press} onMouseUp={unpress} style={{left: (pressed) ? '0px' : '2px'}}onClick={submitAnswer}>{el}</button>,
-        'c': <button className={style.button_item} onMouseDown={press} onMouseUp={unpress} style={{left: (pressed) ? '0px' : '2px'}}onClick={deleteNumber}>{el}</button>
-      }[el] || <button className={style.button_item} onMouseDown={press} onMouseUp={unpress} style={{left: (pressed) ? '0px' : '2px'}}onClick={() => {addNumber(el)}}>{el}</button>
+        '=': <button className={style.button_item} onMouseDown={press} onMouseUp={unpress} style={{transform: `translateX(${pressed ? 0 : 3}px)`}} onClick={submitAnswer}>{el}</button>,
+        'C': <button className={style.button_item} onMouseDown={press} onMouseUp={unpress} style={{transform: `translateX(${pressed ? 0 : 3}px)`}} onClick={deleteNumber}>{el}</button>
+      }[el] || <button className={style.button_item} onMouseDown={press} onMouseUp={unpress} style={{transform: `translateX(${pressed ? 0 : 3}px)`}} onClick={() => {addNumber(el)}}>{el}</button>
       }
+      <div className={style.button_front} style={{transform: `translateX(${pressed ? 0 : 3}px)`}}/>
+      <div className={style.button_back}/>
     </div>
   )
 }

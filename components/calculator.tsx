@@ -10,19 +10,19 @@ import NumberItem from './numberItem';
 
 
 //============================================
-// style fonts, colors and proportions
 // add levels
 // add music
 // make responsive
+// style fonts, colors and proportions
 // fix types "any"
 //============================================
 export default function Counter() {
   // manages the calculator keyboard
-  const [numbers, setNumbers] = useState<(number | string)[]>([1,2,3,4,5,6,7,8,9,"c",0,"="]);
+  const [numbers, setNumbers] = useState<(number | string)[]>([1,2,3,4,5,6,7,8,9,"C",0,"="]);
   // manages the typed result
   const [result, setResult] = useState<SolutionNumber[]>([]);
   // keeps track of the problem to solve
-  const [problem, setProblem] = useState<Problem>({content: "5 + 5", solution: 10, display: true});
+  const [problem, setProblem] = useState<Problem>({content: "500 + 500 + 500", solution: 10, display: true});
   // flag for starting the game (as soon as the first number is typed)
   const [hasStarted, setHasStarted] = useState<Boolean>(false);
   // keeps track of the three available lifes
@@ -181,7 +181,7 @@ export default function Counter() {
         {numbers.map((el : (number | string), idx : number) => <CalcButton key={idx} el={el} submitAnswer={submitAnswer} deleteNumber={deleteNumber} addNumber={addNumber}/>)}
       </div>
       <button onClick={() => {
-        setNumbers(shuffleArray([0,1,2,3,4,5,6,7,8,9,"c","="]))
+        setNumbers(shuffleArray([0,1,2,3,4,5,6,7,8,9,"C","="]))
       }}>shuffle</button>
       <hr></hr>
       <p>

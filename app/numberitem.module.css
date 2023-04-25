@@ -19,7 +19,6 @@
 
 .new_char{
   display: inline-block;
-  transform-box: content-box;
   transform-origin: bottom center;
   opacity: 0;
   transform: translateY(10px);
