@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from 'react';
 import style from '@/app/calculator.module.css';
 import { Problem, SolutionNumber } from '@/types/main';
-import { shuffleArray, getNumberOfLifes, removeLife, generateProblem, getSolutionValue, compareSolutions } from '@/utils/main';
+import { shuffleArray, getNumberOfLifes, removeLife, generateProblem, getSolutionValue, compareSolutions, generateTime } from '@/utils/main';
 import Heart from './heart';
 import CalcButton from './calcButton';
 import NumberItem from './numberItem';
@@ -31,6 +31,8 @@ export default function Counter() {
   const nLifesRef = useRef<number[]>(nLifes);
   // keeps track of the number of problems seen, mostly used for triggering the timeout when a new problem is rendered
   const [nProblems, setNProblems] = useState<number>(1);
+  // keeps track of the problems solved successfully
+  const [nSuccessProblems, setNSuccessProblems] = useState<number>(0);
 
   // html node displaying the timer animation
   const timerNode = useRef<HTMLDivElement>(null);
@@ -38,6 +40,8 @@ export default function Counter() {
   const timer = useRef<any>();
   // animation variable for managing start, clear and finish
   const currAnimation = useRef<Animation>();
+  // timer duration
+  const timerDuration = useRef<number>(10000);
 
   // effect used for tracking the lifes inside the references
   useEffect(() => {
@@ -46,16 +50,20 @@ export default function Counter() {
 
   // effect for managing the answer countdown, triggered on hasStarted and nProblems update
   useEffect(() => {
-    console.log("trigger effect, nLifes = ", nLifesRef.current);
+    console.log("trigger effect, nLifes = ", nLifesRef.current, " nProblems = ", nProblems, " hasStarted = ", hasStarted);
 
     // timeout logic can be executed only if the game has started and there's at least one life left
     if(hasStarted && getNumberOfLifes(nLifesRef.current) > 0){
       // safety check: the HTML node representing the times must be defined
       if(timerNode.current){
-        console.log("setting animation");
+        console.log("setting animation, timer duration = ", timerDuration.current, " successes = ", nSuccessProblems);
         // start animation
-        currAnimation.current = timerNode.current.animate([{ transform: "scaleX(0)" }], {duration: 100000, iterations: 1, fill: "forwards"});
+        currAnimation.current = timerNode.current.animate([{ transform: "scaleX(0)" }], {duration: timerDuration.current, iterations: 1, fill: "forwards"});
         
+        //=======================
+        // check if you need to generate problem earlier or not ?
+        //=======================
+
         // and trigger timeout at the end of the animation time
         timer.current = setTimeout(() => {
           console.log("Failed to solve problem in time! nLifes = ", nLifesRef.current);
@@ -77,7 +85,7 @@ export default function Counter() {
             // stop timer animation
             currAnimation.current?.finish();
           }
-        }, 100000);
+        }, timerDuration.current);
 
       }
     }else{
@@ -104,6 +112,8 @@ export default function Counter() {
       }
 
       // reset to a new problem and increment the number of poblems to trigger a new run of the timer effect
+      setNSuccessProblems(nSuccessProblems + 1);
+      timerDuration.current = generateTime(nSuccessProblems);
       setResult([]);
       setProblem(generateProblem(100));
       setNProblems(nProblems+1);
@@ -187,7 +197,9 @@ export default function Counter() {
       <p>
         ["string" : {problem.content}, "solution" : {problem.solution}, "display": {problem.display ? "true" : "false"}]
       </p>
-
+      <p>
+        success : {nSuccessProblems}
+      </p>
       {/* <button onClick={() => {
         setProblem(generateProblem(100));
       }}>new problem</button> */}

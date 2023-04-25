@@ -53,6 +53,15 @@ export function generateProblem(maxNum : number) : Problem {
 
 }
 
+export function generateTime(nSuccess : number) : number {
+  if(nSuccess < 5){
+    return 10000;
+  }else if(nSuccess < 10){
+    return 5000;
+  }
+  return 2500;
+}
+
 export function getSolutionValue(solution: SolutionNumber[]) : number{
   let stringValue = "";
   for(let i : number = 0; i < solution.length; i++){
