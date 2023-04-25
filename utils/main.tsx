@@ -20,7 +20,7 @@ export function getNumberOfLifes(array : number[]) : number {
   return array.filter((x : number) => x === 1).length;
 }
 
-export function removeLife(array:number[]) : number[] {
+export function removeLife(array : number[]) : number[] {
   let n = getNumberOfLifes(array) - 1;
   if(n >= 0){
     array[n] = 0;
@@ -28,12 +28,21 @@ export function removeLife(array:number[]) : number[] {
   return [...array];
 }
 
-export function generateProblem(maxNum : number) : Problem {
-  let totalElements : number = 2 + getRandomInt(2);
+export function generateProblem(nSuccess : number) : Problem {
+  let maxNum : number = 10;
+  let totalElements : number = 2;
   let operators : string[] = [getRandomOperator(), "+"];
   let numbers : number[] = [];
   let problemString : string = "";
   let problemSolution : number = 0;
+
+  if(nSuccess > 5 && nSuccess <= 10){
+    totalElements += getRandomInt(2);
+    maxNum = 20;
+  }else if(nSuccess > 10){
+    totalElements += 1;
+    maxNum = 100;
+  }
 
   for (let i : number = 0; i < totalElements; i++){
     let value : number = 1 + getRandomInt(maxNum);

@@ -11,6 +11,8 @@ import NumberItem from './numberItem';
 
 //============================================
 // add levels
+// -> generate problems based on number of successes
+// -> shuffle buttons depending on number of successes (either on new level or also on click)
 // add music
 // make responsive
 // style fonts, colors and proportions
@@ -22,7 +24,7 @@ export default function Counter() {
   // manages the typed result
   const [result, setResult] = useState<SolutionNumber[]>([]);
   // keeps track of the problem to solve
-  const [problem, setProblem] = useState<Problem>({content: "500 + 500 + 500", solution: 10, display: true});
+  const [problem, setProblem] = useState<Problem>({content: "5 + 5", solution: 10, display: true});
   // flag for starting the game (as soon as the first number is typed)
   const [hasStarted, setHasStarted] = useState<Boolean>(false);
   // keeps track of the three available lifes
@@ -59,10 +61,6 @@ export default function Counter() {
         console.log("setting animation, timer duration = ", timerDuration.current, " successes = ", nSuccessProblems);
         // start animation
         currAnimation.current = timerNode.current.animate([{ transform: "scaleX(0)" }], {duration: timerDuration.current, iterations: 1, fill: "forwards"});
-        
-        //=======================
-        // check if you need to generate problem earlier or not ?
-        //=======================
 
         // and trigger timeout at the end of the animation time
         timer.current = setTimeout(() => {
@@ -74,7 +72,7 @@ export default function Counter() {
             currAnimation.current?.cancel();
             setNLifes(removeLife(nLifesRef.current));
             setResult([]);
-            setProblem(generateProblem(100));
+            setProblem(generateProblem(nSuccessProblems));
             // increase number of problems, to trigger effect for timeout again
             setNProblems(nProblems+1);
           // otherwise it's game over
@@ -115,7 +113,7 @@ export default function Counter() {
       setNSuccessProblems(nSuccessProblems + 1);
       timerDuration.current = generateTime(nSuccessProblems);
       setResult([]);
-      setProblem(generateProblem(100));
+      setProblem(generateProblem(nSuccessProblems));
       setNProblems(nProblems+1);
     
     // otherwise it's a wrong answer, execute logic only if there are lifes left
@@ -155,7 +153,7 @@ export default function Counter() {
     if(!hasStarted && e != 0){
       setHasStarted(true);
     }
-    if(result.length > 0 || e != 0){
+    if(!(result.length == 1 && result[0].content == 0)){
       setProblem({...problem, display: false});
       let newSolution = [...result];
       newSolution.push({content: num, flash: false});
