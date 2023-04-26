@@ -62,7 +62,7 @@ export default function Counter() {
         // start animation
         currAnimation.current = timerNode.current.animate([{ transform: "scaleX(0)" }], {duration: timerDuration.current, iterations: 1, fill: "forwards"});
 
-        // and trigger timeout at the end of the animation time
+        // and trigger timeout at the end of the animation time. If triggered it will generate a new problem and remove one life
         timer.current = setTimeout(() => {
           console.log("Failed to solve problem in time! nLifes = ", nLifesRef.current);
           // if the user has some lifes left then remove 1 life
@@ -106,17 +106,19 @@ export default function Counter() {
         // cancel the timer animation
         currAnimation.current.cancel();
       }else{
-        console.log("WARNING!! The animation is not defined")
+        // it should never enter here
+        console.log("WARNING!! The animation is not defined");
       }
 
       // reset to a new problem and increment the number of poblems to trigger a new run of the timer effect
       setNSuccessProblems(nSuccessProblems + 1);
+      // as the user solves more levels then the available time interval may change
       timerDuration.current = generateTime(nSuccessProblems);
       setResult([]);
       setProblem(generateProblem(nSuccessProblems));
       setNProblems(nProblems+1);
     
-    // otherwise it's a wrong answer, execute logic only if there are lifes left
+    // otherwise it's a wrong answer, execute logic only if there are lifes left. It doesn't generate a new problem
     }else if(!isNaN(currentResult) && getNumberOfLifes(nLifes) > 0 && hasStarted){
       let wrongNumbers : number[] = compareSolutions(problem.solution, currentResult);
       let newResultFormat = result;
@@ -124,7 +126,6 @@ export default function Counter() {
         newResultFormat[i].flash = !newResultFormat[i].flash;
       })
       setResult(newResultFormat);
-
 
       console.log("wrong answer!", wrongNumbers);
       console.log("removing life")
@@ -150,7 +151,7 @@ export default function Counter() {
     }else{
       num = parseInt(e);
     }
-    if(!hasStarted && e != 0){
+    if(!hasStarted){
       setHasStarted(true);
     }
     if(!(result.length == 1 && result[0].content == 0)){
