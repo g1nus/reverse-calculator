@@ -26,5 +26,5 @@
 }
 
 .flash_char{
-  animation: 0.8s linear 0s 1 forwards flash;
+  animation: 0.4s linear 0s 1 forwards flash;
 }

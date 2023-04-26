@@ -24,7 +24,7 @@ export default function NumberItem({item} : Props) {
         setTimeout(() => {
           console.log("remove flashing");
           setFlashing(false);
-        }, 1000);
+        }, 500);
       }
     }
   }, [item.flash])

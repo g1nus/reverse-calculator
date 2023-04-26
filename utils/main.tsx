@@ -36,12 +36,22 @@ export function generateProblem(nSuccess : number) : Problem {
   let problemString : string = "";
   let problemSolution : number = 0;
 
-  if(nSuccess > 5 && nSuccess <= 10){
+  // LEVEL LOGIC: for setting up problem complexity
+  if(nSuccess < 10){
+    maxNum = 10;
+    totalElements = 2;
+  }else if(nSuccess < 20){
     totalElements += getRandomInt(2);
     maxNum = 20;
-  }else if(nSuccess > 10){
-    totalElements += 1;
+  }else if(nSuccess < 30){
+    totalElements += getRandomInt(2);
     maxNum = 100;
+  }else if(nSuccess < 35){
+    totalElements += getRandomInt(2);
+    maxNum = 500;
+  }else{
+    totalElements = 3;
+    maxNum = 1000;
   }
 
   for (let i : number = 0; i < totalElements; i++){
@@ -63,12 +73,17 @@ export function generateProblem(nSuccess : number) : Problem {
 }
 
 export function generateTime(nSuccess : number) : number {
+  // LEVEL LOGIC: for setting up available time
   if(nSuccess < 5){
     return 10000;
   }else if(nSuccess < 10){
     return 5000;
+  }else if(nSuccess < 30){
+    return 10000;
+  }else if(nSuccess < 35){
+    return 20000;
   }
-  return 2500;
+  return 5000;
 }
 
 export function getSolutionValue(solution: SolutionNumber[]) : number{

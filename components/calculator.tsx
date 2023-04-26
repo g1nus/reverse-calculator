@@ -8,11 +8,16 @@ import Heart from './heart';
 import CalcButton from './calcButton';
 import NumberItem from './numberItem';
 
-
 //============================================
-// add levels
-// -> generate problems based on number of successes
-// -> shuffle buttons depending on number of successes (either on new level or also on click)
+// 1 - 5   : 2 unit numbers 10 seconds
+// 6 - 10  : 2 unit numbers 5 seconds
+// 11 - 15 : up to 3 big numbers (<20) 10 seconds
+// 16 - 20 : up to 3 big numbers (<20), shuffle per level, 10 seconds
+// 21 - 25 : up to 3 big numbers (<100), shuffle per level, 10 seconds 
+// 26 - 30 : up to 3 big numbers (<100), shuffle per click, 10 seconds
+// 30 - 35 : up to 3 big numbers (<500), shuffle per click, 20 seconds
+// 35 - up : 3 big numbers (<1000), shuffle per click, 10 seconds
+//============================================
 // add music
 // make responsive
 // style fonts, colors and proportions
@@ -50,12 +55,9 @@ export default function Counter() {
     nLifesRef.current = nLifes;
   }, [nLifes]);
 
-  // effect for shuffling buttons on level changes
+  // LEVEL LOGIC: effect for shuffling buttons on level changes
   useEffect(() => {
-    //=============
-    // this shuffle should be stopped once the suffle per click will happen <-----------------
-    //=============
-    if(nSuccessProblems > 5) {
+    if(nSuccessProblems >= 15) {
       setNumbers(shuffleArray([0,1,2,3,4,5,6,7,8,9,"C","="]))
     }
   }, [nSuccessProblems])
@@ -169,7 +171,8 @@ export default function Counter() {
       let newSolution = [...result];
       newSolution.push({content: num, flash: false});
       setResult(newSolution);
-      if(nSuccessProblems < 5){
+      // LEVEL LOGIC: if above level 25 shuffle on every click button
+      if(nSuccessProblems >= 25){
         setNumbers(shuffleArray([0,1,2,3,4,5,6,7,8,9,"C","="]))
       }
     }
