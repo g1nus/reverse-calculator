@@ -50,6 +50,13 @@ export default function Counter() {
     nLifesRef.current = nLifes;
   }, [nLifes]);
 
+  // effect for shuffling buttons on level changes
+  useEffect(() => {
+    if(nSuccessProblems > 5) {
+      setNumbers(shuffleArray([0,1,2,3,4,5,6,7,8,9,"C","="]))
+    }
+  }, [nSuccessProblems])
+
   // effect for managing the answer countdown, triggered on hasStarted and nProblems update
   useEffect(() => {
     console.log("trigger effect, nLifes = ", nLifesRef.current, " nProblems = ", nProblems, " hasStarted = ", hasStarted);
