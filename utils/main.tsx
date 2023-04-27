@@ -47,7 +47,7 @@ export function generateProblem(nSuccess : number) : Problem {
     totalElements += getRandomInt(2);
     maxNum = 100;
   }else if(nSuccess < 35){
-    totalElements += getRandomInt(2);
+    totalElements = 3;
     maxNum = 500;
   }else{
     totalElements = 3;

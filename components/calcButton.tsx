@@ -8,15 +8,18 @@ type Props = {
   submitAnswer: () => void;
   deleteNumber: () => void;
   addNumber: (e: (number | string)) => void;
+  playAudio: (audio: (HTMLAudioElement | null)) => void;
 };
 
-export default function CalcButton({el, submitAnswer, deleteNumber, addNumber} : Props) {
+export default function CalcButton({el, submitAnswer, deleteNumber, addNumber, playAudio} : Props) {
 
   const isInitialMount = useRef<boolean>(true);
 
   const [pressed, setPressed] = useState<boolean>(false);
 
   const [flash, setFlash] = useState<boolean>(false);
+
+  const clickAudioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
     if (isInitialMount.current) {
@@ -30,6 +33,7 @@ export default function CalcButton({el, submitAnswer, deleteNumber, addNumber} :
   }, [el])
 
   function press(){
+    playAudio(clickAudioRef.current);
     setPressed(true);
   }
 
@@ -47,6 +51,7 @@ export default function CalcButton({el, submitAnswer, deleteNumber, addNumber} :
       }
       <div className={style.button_front} style={{transform: `translateX(${pressed ? 0 : 3}px)`}}/>
       <div className={style.button_back}/>
+      <audio src="./click.mp3" ref={clickAudioRef}/>
     </div>
   )
 }

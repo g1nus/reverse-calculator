@@ -15,10 +15,11 @@ import NumberItem from './numberItem';
 // 16 - 20 : up to 3 big numbers (<20), shuffle per level, 10 seconds
 // 21 - 25 : up to 3 big numbers (<100), shuffle per level, 10 seconds 
 // 26 - 30 : up to 3 big numbers (<100), shuffle per click, 10 seconds
-// 30 - 35 : up to 3 big numbers (<500), shuffle per click, 20 seconds
+// 30 - 35 : 3 big numbers (<500), shuffle per click, 20 seconds
 // 35 - up : 3 big numbers (<1000), shuffle per click, 10 seconds
 //============================================
 // add music
+// -> create a ref to an audio tag here on the main app and then pass it to the components that need it (or create a layout and pass it that way?)
 // make responsive
 // style fonts, colors and proportions
 // fix types "any"
@@ -40,6 +41,8 @@ export default function Counter() {
   const [nProblems, setNProblems] = useState<number>(1);
   // keeps track of the problems solved successfully
   const [nSuccessProblems, setNSuccessProblems] = useState<number>(0);
+  // toggle audio sound effects
+  const [mute, setMute] = useState<boolean>(false);
 
   // html node displaying the timer animation
   const timerNode = useRef<HTMLDivElement>(null);
@@ -49,6 +52,17 @@ export default function Counter() {
   const currAnimation = useRef<Animation>();
   // timer duration
   const timerDuration = useRef<number>(10000);
+
+  // ref for sound effect
+  const errAudioRef = useRef<HTMLAudioElement>(null);
+  const timeAudioRef = useRef<HTMLAudioElement>(null);
+
+  function playAudio(audio : (HTMLAudioElement | null)) {
+    if(audio && !mute){
+      audio.currentTime = 0;
+      audio.play();
+    }
+  }
 
   // effect used for tracking the lifes inside the references
   useEffect(() => {
@@ -76,6 +90,7 @@ export default function Counter() {
 
         // and trigger timeout at the end of the animation time. If triggered it will generate a new problem and remove one life
         timer.current = setTimeout(() => {
+          playAudio(timeAudioRef.current);
           console.log("Failed to solve problem in time! nLifes = ", nLifesRef.current);
           // if the user has some lifes left then remove 1 life
           if(getNumberOfLifes(nLifesRef.current) > 1){
@@ -132,6 +147,7 @@ export default function Counter() {
     
     // otherwise it's a wrong answer, execute logic only if there are lifes left. It doesn't generate a new problem
     }else if(!isNaN(currentResult) && getNumberOfLifes(nLifes) > 0 && hasStarted){
+      playAudio(errAudioRef.current);
       let wrongNumbers : number[] = compareSolutions(problem.solution, currentResult);
       let newResultFormat = result;
       wrongNumbers.map((i) => {
@@ -203,11 +219,8 @@ export default function Counter() {
         <p>{!problem.display ? result.map((c, i) => <NumberItem key={i} item={c}/>) : problem.content}</p>
       </div>
       <div className={style.buttons_holder}>
-        {numbers.map((el : (number | string), idx : number) => <CalcButton key={idx} el={el} submitAnswer={submitAnswer} deleteNumber={deleteNumber} addNumber={addNumber}/>)}
+        {numbers.map((el : (number | string), idx : number) => <CalcButton key={idx} el={el} submitAnswer={submitAnswer} deleteNumber={deleteNumber} addNumber={addNumber} playAudio={playAudio}/>)}
       </div>
-      <button onClick={() => {
-        setNumbers(shuffleArray([0,1,2,3,4,5,6,7,8,9,"C","="]))
-      }}>shuffle</button>
       <hr></hr>
       <p>
         ["string" : {problem.content}, "solution" : {problem.solution}, "display": {problem.display ? "true" : "false"}]
@@ -215,6 +228,8 @@ export default function Counter() {
       <p>
         success : {nSuccessProblems}
       </p>
+      <audio src="./err.mp3" ref={errAudioRef}/>
+      <audio src="./timeover.mp3" ref={timeAudioRef}/>
       {/* <button onClick={() => {
         setProblem(generateProblem(100));
       }}>new problem</button> */}
