@@ -1,31 +1,45 @@
 .audio_holder {
-  width: 56px;
-  min-height: 24px;
+  width: 70px;
+  min-height: 30px;
   padding: 2px;
-  border-radius: 12px;
-  border: solid 1px black;
+  border-radius: 15px;
+  border: solid 2px black;
   display: flex;
   flex-flow: row nowrap;
+  overflow: hidden;
+}
+
+.slider_holder{
+  display: flex;
+  flex-flow: row nowrap;
+  min-height: 100%;
+  transition: all 0.2s linear;
+  transform: translateX(0px);
 }
 
 .audio_on, .audio_button, .audio_off {
   height: 100%;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .audio_on, .audio_off {
-  min-width: 30px;
+  min-width: 40px;
 }
 
 .audio_on {
-  border: solid 1px green;
+  border: solid 1px transparent;
+  background-image: url("/unmuted.svg");
 }
 
 .audio_button {
-  min-width: 20px;
-  border: solid 1px blue;
-  border-radius: 50%;
+  min-width: 22px;
+  border: solid 0px transparent;
+  background-image: url("/togglevol.svg");
 }
 
 .audio_off {
   border: solid 1px transparent;
+  background-image: url("/muted.svg");
 }

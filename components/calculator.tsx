@@ -19,12 +19,10 @@ import AudioToggle from './audioToggle';
 // 30 - 35 : 3 big numbers (<500), shuffle per click, 20 seconds
 // 35 - up : 3 big numbers (<1000), shuffle per click, 10 seconds
 //============================================
-// add music
-// -> create a ref to an audio tag here on the main app and then pass it to the components that need it (or create a layout and pass it that way?)
-// -> make button for toggling audio
+// polish audio button
+// fix types "any"
 // make responsive
 // style fonts, colors and proportions
-// fix types "any"
 //============================================
 export default function Counter() {
   // manages the calculator keyboard
@@ -233,7 +231,7 @@ export default function Counter() {
       <p>
         success : {nSuccessProblems}
       </p>
-      <AudioToggle muted={mute}/>
+      <AudioToggle muted={mute} setMuted={setMute}/>
       <audio src="./err.mp3" ref={errAudioRef}/>
       <audio src="./timeover.mp3" ref={timeAudioRef}/>
       {/* <button onClick={() => {
