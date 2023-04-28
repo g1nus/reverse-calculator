@@ -1,0 +1,31 @@
+.audio_holder {
+  width: 56px;
+  min-height: 24px;
+  padding: 2px;
+  border-radius: 12px;
+  border: solid 1px black;
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.audio_on, .audio_button, .audio_off {
+  height: 100%;
+}
+
+.audio_on, .audio_off {
+  min-width: 30px;
+}
+
+.audio_on {
+  border: solid 1px green;
+}
+
+.audio_button {
+  min-width: 20px;
+  border: solid 1px blue;
+  border-radius: 50%;
+}
+
+.audio_off {
+  border: solid 1px transparent;
+}

@@ -7,6 +7,7 @@ import { shuffleArray, getNumberOfLifes, removeLife, generateProblem, getSolutio
 import Heart from './heart';
 import CalcButton from './calcButton';
 import NumberItem from './numberItem';
+import AudioToggle from './audioToggle';
 
 //============================================
 // 1 - 5   : 2 unit numbers 10 seconds
@@ -20,6 +21,7 @@ import NumberItem from './numberItem';
 //============================================
 // add music
 // -> create a ref to an audio tag here on the main app and then pass it to the components that need it (or create a layout and pass it that way?)
+// -> make button for toggling audio
 // make responsive
 // style fonts, colors and proportions
 // fix types "any"
@@ -228,6 +230,7 @@ export default function Counter() {
       <p>
         success : {nSuccessProblems}
       </p>
+      <AudioToggle muted={mute}/>
       <audio src="./err.mp3" ref={errAudioRef}/>
       <audio src="./timeover.mp3" ref={timeAudioRef}/>
       {/* <button onClick={() => {
