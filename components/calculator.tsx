@@ -66,6 +66,8 @@ export default function Counter() {
     }
   }
 
+  const [log, setLog] = useState<string>("");
+
   // effect used for tracking the lifes inside the references
   useEffect(() => {
     nLifesRef.current = nLifes;
@@ -221,9 +223,10 @@ export default function Counter() {
         <p>{!problem.display ? result.map((c, i) => <NumberItem key={i} item={c}/>) : problem.content}</p>
       </div>
       <div className={style.buttons_holder}>
-        {numbers.map((el : (number | string), idx : number) => <CalcButton key={idx} el={el} submitAnswer={submitAnswer} deleteNumber={deleteNumber} addNumber={addNumber} playAudio={playAudio}/>)}
+        {numbers.map((el : (number | string), idx : number) => <CalcButton key={idx} log={log} setLog={setLog} el={el} submitAnswer={submitAnswer} deleteNumber={deleteNumber} addNumber={addNumber} playAudio={playAudio}/>)}
       </div>
       <hr></hr>
+      <p>{log}</p>
       <p>
         ["string" : {problem.content}, "solution" : {problem.solution}, "display": {problem.display ? "true" : "false"}]
       </p>

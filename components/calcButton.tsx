@@ -1,9 +1,11 @@
 'use client';
 
 import style from '@/app/calcbutton.module.css';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, MouseEventHandler } from 'react';
 
 type Props = {
+  log: string;
+  setLog: any;
   el: (number | string);
   submitAnswer: () => void;
   deleteNumber: () => void;
@@ -11,7 +13,7 @@ type Props = {
   playAudio: (audio: (HTMLAudioElement | null)) => void;
 };
 
-export default function CalcButton({el, submitAnswer, deleteNumber, addNumber, playAudio} : Props) {
+export default function CalcButton({log, setLog, el, submitAnswer, deleteNumber, addNumber, playAudio} : Props) {
 
   const isInitialMount = useRef<boolean>(true);
 
@@ -32,22 +34,24 @@ export default function CalcButton({el, submitAnswer, deleteNumber, addNumber, p
     }
   }, [el])
 
-  function press(){
+  function press(e : any){
+    // setLog(log + " - p")
     playAudio(clickAudioRef.current);
     setPressed(true);
   }
 
   function unpress(){
+    // setLog(log + " - u")
     setPressed(false);
   }
 
   return(
-    <div className={style.button_item_holder} onMouseLeave={unpress}>
+    <div className={style.button_item_holder} onPointerLeave={unpress}>
       <div className={style.button_mid}/>
       {{
-        '=': <button className={style.button_item} onMouseDown={press} onMouseUp={unpress} style={{transform: `translateX(${pressed ? 0 : 3}px)`, backgroundColor: (flash) ? "grey": "white", color: (flash) ? "white": "black"}} onClick={submitAnswer}>{el}</button>,
-        'C': <button className={style.button_item} onMouseDown={press} onMouseUp={unpress} style={{transform: `translateX(${pressed ? 0 : 3}px)`, backgroundColor: (flash) ? "grey": "white", color: (flash) ? "white": "black"}} onClick={deleteNumber}>{el}</button>
-      }[el] || <button className={style.button_item} onMouseDown={press} onMouseUp={unpress} style={{transform: `translateX(${pressed ? 0 : 3}px)`, backgroundColor: (flash) ? "grey": "white", color: (flash) ? "white": "black"}} onClick={() => {addNumber(el)}}>{el}</button>
+        '=': <button className={style.button_item} onPointerDown={press} onPointerUp={unpress} style={{transform: `translateX(${pressed ? 0 : 3}px)`, backgroundColor: (flash) ? "grey": "white", color: (flash) ? "white": "black"}} onClick={submitAnswer}>{el}</button>,
+        'C': <button className={style.button_item} onPointerDown={press} onPointerUp={unpress} style={{transform: `translateX(${pressed ? 0 : 3}px)`, backgroundColor: (flash) ? "grey": "white", color: (flash) ? "white": "black"}} onClick={deleteNumber}>{el}</button>
+      }[el] || <button className={style.button_item} onPointerDown={press} onPointerUp={unpress} style={{transform: `translateX(${pressed ? 0 : 3}px)`, backgroundColor: (flash) ? "grey": "white", color: (flash) ? "white": "black"}} onClick={() => {addNumber(el)}}>{el}</button>
       }
       <div className={style.button_front} style={{transform: `translateX(${pressed ? 0 : 3}px)`}}/>
       <div className={style.button_back}/>
