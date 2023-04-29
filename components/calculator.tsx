@@ -19,10 +19,8 @@ import AudioToggle from './audioToggle';
 // 30 - 35 : 3 big numbers (<500), shuffle per click, 20 seconds
 // 35 - up : 3 big numbers (<1000), shuffle per click, 10 seconds
 //============================================
-// fix types "any"
-// save record on local storage
-// make responsive
 // style fonts, colors and proportions
+// make responsive
 //============================================
 export default function Counter() {
   // manages the calculator keyboard
@@ -49,7 +47,7 @@ export default function Counter() {
   // html node displaying the timer animation
   const timerNode = useRef<HTMLDivElement>(null);
   // actual timeout variable
-  const timer = useRef<any>();
+  const timer = useRef<ReturnType<typeof setTimeout>>();
   // animation variable for managing start, clear and finish
   const currAnimation = useRef<Animation>();
   // timer duration
@@ -236,16 +234,15 @@ export default function Counter() {
       <div className={style.buttons_holder}>
         {numbers.map((el : (number | string), idx : number) => <CalcButton key={idx} log={log} setLog={setLog} el={el} submitAnswer={submitAnswer} deleteNumber={deleteNumber} addNumber={addNumber} playAudio={playAudio}/>)}
       </div>
-      <hr></hr>
-      <p>{log}</p>
+      {/*<p>{log}</p>*/}  
       <p>
-        ["string" : {problem.content}, "solution" : {problem.solution}, "display": {problem.display ? "true" : "false"}]
+        HIGH SCORE : {highScore}
       </p>
       <p>
-        score : {nSuccessProblems}
+        SCORE : {nSuccessProblems}
       </p>
       <p>
-        highscore : {highScore}
+        <a href="/">restart</a>
       </p>
       <AudioToggle muted={mute} setMuted={setMute}/>
       <audio src="./err.mp3" ref={errAudioRef}/>
