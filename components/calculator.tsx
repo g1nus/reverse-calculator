@@ -19,8 +19,8 @@ import AudioToggle from './audioToggle';
 // 30 - 35 : 3 big numbers (<500), shuffle per click, 20 seconds
 // 35 - up : 3 big numbers (<1000), shuffle per click, 10 seconds
 //============================================
-// polish audio button
 // fix types "any"
+// save record on local storage
 // make responsive
 // style fonts, colors and proportions
 //============================================
