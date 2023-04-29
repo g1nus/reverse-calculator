@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from 'react';
 import style from '@/app/calculator.module.css';
 import { Problem, SolutionNumber } from '@/types/main';
-import { shuffleArray, getNumberOfLifes, removeLife, generateProblem, getSolutionValue, compareSolutions, generateTime } from '@/utils/main';
+import { shuffleArray, getNumberOfLifes, removeLife, generateProblem, getSolutionValue, compareSolutions, generateTime, getHS, setHS } from '@/utils/main';
 import Heart from './heart';
 import CalcButton from './calcButton';
 import NumberItem from './numberItem';
@@ -41,6 +41,8 @@ export default function Counter() {
   const [nProblems, setNProblems] = useState<number>(1);
   // keeps track of the problems solved successfully
   const [nSuccessProblems, setNSuccessProblems] = useState<number>(0);
+  // keeps track of the high score
+  const [highScore, setHighScore] = useState<number>(0);
   // toggle audio sound effects
   const [mute, setMute] = useState<boolean>(false);
 
@@ -65,6 +67,12 @@ export default function Counter() {
   }
 
   const [log, setLog] = useState<string>("");
+
+  useEffect(() => {
+    let hs = getHS();
+    console.log("get the high score : ", hs);
+    setHighScore(hs);
+  }, [])
 
   // effect used for tracking the lifes inside the references
   useEffect(() => {
@@ -109,6 +117,7 @@ export default function Counter() {
             // remove last life
             setNLifes(removeLife(nLifesRef.current));
             console.log("GAME OVER!! (from timeout)");
+            setHS(highScore);
             // stop timer animation
             currAnimation.current?.finish();
           }
@@ -141,6 +150,9 @@ export default function Counter() {
 
       // reset to a new problem and increment the number of poblems to trigger a new run of the timer effect
       setNSuccessProblems(nSuccessProblems + 1);
+      if((nSuccessProblems + 1) > highScore){
+        setHighScore(nSuccessProblems + 1);
+      }
       // as the user solves more levels then the available time interval may change
       timerDuration.current = generateTime(nSuccessProblems);
       setResult([]);
@@ -169,6 +181,7 @@ export default function Counter() {
           console.log("WARNING!! The animation is not defined")
         }
         console.log("GAME OVER!! (from wrong answer)");
+        setHS(highScore);
         clearInterval(timer.current);
       }
     }
@@ -229,7 +242,10 @@ export default function Counter() {
         ["string" : {problem.content}, "solution" : {problem.solution}, "display": {problem.display ? "true" : "false"}]
       </p>
       <p>
-        success : {nSuccessProblems}
+        score : {nSuccessProblems}
+      </p>
+      <p>
+        highscore : {highScore}
       </p>
       <AudioToggle muted={mute} setMuted={setMute}/>
       <audio src="./err.mp3" ref={errAudioRef}/>

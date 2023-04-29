@@ -121,3 +121,14 @@ export function compareSolutions(solution: number, answer: number) : number[] {
 
   return wrongNumbers;
 }
+
+export function getHS() : number{
+  return parseInt(localStorage.getItem('hs') || "0");
+}
+
+export function setHS(hs : number) {
+  let currentHs = parseInt(localStorage.getItem('hs') || "0");
+  if(hs > currentHs){
+    localStorage.setItem('hs', JSON.stringify(hs));
+  }
+}
