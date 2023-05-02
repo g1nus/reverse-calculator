@@ -44,6 +44,9 @@ export default function Counter() {
   // toggle audio sound effects
   const [mute, setMute] = useState<boolean>(false);
 
+  // ref for audio mute
+  const muteRef = useRef<boolean>(false);
+
   // html node displaying the timer animation
   const timerNode = useRef<HTMLDivElement>(null);
   // actual timeout variable
@@ -58,7 +61,7 @@ export default function Counter() {
   const timeAudioRef = useRef<HTMLAudioElement>(null);
 
   function playAudio(audio : (HTMLAudioElement | null)) {
-    if(audio && !mute){
+    if(audio && !muteRef.current){
       audio.currentTime = 0;
       audio.play();
     }
@@ -76,6 +79,11 @@ export default function Counter() {
   useEffect(() => {
     nLifesRef.current = nLifes;
   }, [nLifes]);
+
+  // effect used for tracking the mute toggle inside the reference
+  useEffect(() => {
+    muteRef.current = mute;
+  }, [mute])
 
   // LEVEL LOGIC: effect for shuffling buttons on level changes
   useEffect(() => {
@@ -98,8 +106,8 @@ export default function Counter() {
 
         // and trigger timeout at the end of the animation time. If triggered it will generate a new problem and remove one life
         timer.current = setTimeout(() => {
+          console.log("Failed to solve problem in time! nLifes = ", nLifesRef.current, " muted = ", muteRef.current);
           playAudio(timeAudioRef.current);
-          console.log("Failed to solve problem in time! nLifes = ", nLifesRef.current);
           // if the user has some lifes left then remove 1 life
           if(getNumberOfLifes(nLifesRef.current) > 1){
             console.log("removing life")
