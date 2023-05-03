@@ -237,8 +237,9 @@ export default function Counter() {
         {!problem.display ? <p className={style.problem_holder_content}>{problem.content}</p> : <p></p>}
       </div>
       <div className={style.display}>
+        <div className={style.display_front}></div>
         <p>{!problem.display ? result.map((c, i) => <NumberItem key={i} item={c}/>) : problem.content}</p>
-        <div className={style.display_depth}></div>
+        <div className={style.display_depth_holder}><div className={style.display_depth}></div></div>
       </div>
       <div className={style.buttons_holder}>
         {numbers.map((el : (number | string), idx : number) => <CalcButton key={idx} log={log} setLog={setLog} el={el} submitAnswer={submitAnswer} deleteNumber={deleteNumber} addNumber={addNumber} playAudio={playAudio}/>)}
