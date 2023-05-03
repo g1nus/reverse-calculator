@@ -2,7 +2,7 @@
   position: relative;
   width: 27%;
   aspect-ratio: 1 / 1;
-  margin: 3px 0px 3px 0px;
+  margin: 3px 0px 5px 0px;
 }
 
 .button_back, .button_item, .button_front{
@@ -25,7 +25,7 @@
 }
 
 .button_item{
-  font-size: 25px;
+  font-size: 28px;
   font-weight: 500;
   border: none;
   transform: translateX(3px);

@@ -238,18 +238,19 @@ export default function Counter() {
       </div>
       <div className={style.display}>
         <p>{!problem.display ? result.map((c, i) => <NumberItem key={i} item={c}/>) : problem.content}</p>
+        <div className={style.display_depth}></div>
       </div>
       <div className={style.buttons_holder}>
         {numbers.map((el : (number | string), idx : number) => <CalcButton key={idx} log={log} setLog={setLog} el={el} submitAnswer={submitAnswer} deleteNumber={deleteNumber} addNumber={addNumber} playAudio={playAudio}/>)}
       </div>
       {/*<p>{log}</p>*/}  
-      <p>
+      <p className={style.score}>
         HIGH SCORE : {highScore}
       </p>
-      <p>
+      <p className={style.score}>
         SCORE : {nSuccessProblems}
       </p>
-      <p>
+      <p className={style.restart}>
         <a href="/">restart</a>
       </p>
       <AudioToggle muted={mute} setMuted={setMute}/>
