@@ -1,5 +1,4 @@
-// eslint-disable-next-line import/no-unresolved
-import { Analytics } from '@vercel/analytics/react';
+import { Analytics } from '../components/Analytics'
 
 import './globals.css'
 
