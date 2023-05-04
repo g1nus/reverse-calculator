@@ -49,9 +49,9 @@ export default function CalcButton({log, setLog, el, submitAnswer, deleteNumber,
     <div className={style.button_item_holder} onPointerLeave={unpress}>
       <div className={style.button_mid}/>
       {{
-        '=': <button className={style.button_item} onPointerDown={press} onPointerUp={unpress} style={{transform: `translateX(${pressed ? 0 : 3}px)`, backgroundColor: (flash) ? "grey": "white", color: (flash) ? "white": "black"}} onClick={submitAnswer}>{el}</button>,
-        'C': <button className={style.button_item} onPointerDown={press} onPointerUp={unpress} style={{transform: `translateX(${pressed ? 0 : 3}px)`, backgroundColor: (flash) ? "grey": "white", color: (flash) ? "white": "black"}} onClick={deleteNumber}>{el}</button>
-      }[el] || <button className={style.button_item} onPointerDown={press} onPointerUp={unpress} style={{transform: `translateX(${pressed ? 0 : 3}px)`, backgroundColor: (flash) ? "grey": "white", color: (flash) ? "white": "black"}} onClick={() => {addNumber(el)}}>{el}</button>
+        '=': <button className={style.button_item} onPointerDown={press} onPointerUp={unpress} style={{transform: `translateX(${pressed ? 0 : 3}px)`, backgroundColor: (flash) ? "grey": "#fafafa", color: (flash) ? "#fafafa": "black"}} onClick={submitAnswer}>{el}</button>,
+        'C': <button className={style.button_item} onPointerDown={press} onPointerUp={unpress} style={{transform: `translateX(${pressed ? 0 : 3}px)`, backgroundColor: (flash) ? "grey": "#fafafa", color: (flash) ? "#fafafa": "black"}} onClick={deleteNumber}>{el}</button>
+      }[el] || <button className={style.button_item} onPointerDown={press} onPointerUp={unpress} style={{transform: `translateX(${pressed ? 0 : 3}px)`, backgroundColor: (flash) ? "grey": "#fafafa", color: (flash) ? "#fafafa": "black"}} onClick={() => {addNumber(el)}}>{el}</button>
       }
       <div className={style.button_front} style={{transform: `translateX(${pressed ? 0 : 3}px)`}}/>
       <div className={style.button_back}/>

@@ -16,6 +16,7 @@ body {
   display: flex;
   flex-flow: column;
   align-items: center;
+  background-color: #fafafa;
 }
 
 @supports not (aspect-ratio: 1 / 1) {

@@ -3,7 +3,7 @@
   min-height: 30px;
   padding: 2px;
   border-radius: 15px;
-  border: solid 2px black;
+  border: solid 2px #1f1f1f;
   display: flex;
   flex-flow: row nowrap;
   overflow: hidden;
