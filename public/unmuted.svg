@@ -8,8 +8,12 @@
    xmlns:svg="http://www.w3.org/2000/svg">
   <defs
      id="defs4">
-    <style
-       id="style2">.cls-1{fill:#333;}.cls-2{fill:none;stroke:#333;stroke-linecap:round;stroke-linejoin:round;stroke-width:56.18px;}</style>
+    <style id="style2">
+      .cls-1{fill:#333;}.cls-2{fill:none;stroke:#333;stroke-linecap:round;stroke-linejoin:round;stroke-width:56.18px;}
+      @media (prefers-color-scheme: dark){
+         .cls-1{fill:#c8c8c8;}.cls-2{fill:none;stroke:#c8c8c8;stroke-linecap:round;stroke-linejoin:round;stroke-width:56.18px;}
+      }
+    </style>
   </defs>
   <path
      class="cls-1"

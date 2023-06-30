@@ -31,9 +31,12 @@
      inkscape:current-layer="Layer_1" />
   <defs
      id="defs295">
-    <style
-       id="style293">.cls-1,.cls-2{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#999;stroke-width:45px;}.cls-2{stroke:#1f1f1f;stroke-width:90px;}
-</style>
+    <style id="style293">
+         .cls-1,.cls-2{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#999;stroke-width:45px;}.cls-2{stroke:#1f1f1f;stroke-width:90px;}
+         @media (prefers-color-scheme: dark){
+            .cls-1,.cls-2{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#919191;stroke-width:45px;}.cls-2{stroke:#c8c8c8;stroke-width:90px;}
+         }
+   </style>
   </defs>
   <g
      id="g402"

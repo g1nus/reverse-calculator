@@ -14,7 +14,9 @@
 .cls_1,.cls_2{fill:none;stroke-miterlimit:10;stroke-width: 20px;}
 .cls_1{stroke:#141414; fill: #141414;}
 .cls_2{stroke: none; fill: none}
-
+@media (prefers-color-scheme: dark){
+    .cls_1{stroke:#fafafa; fill: #fafafa;}
+  }
 .of{
   overflow: visible;
 }

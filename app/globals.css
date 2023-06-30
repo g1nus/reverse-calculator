@@ -19,6 +19,12 @@ body {
   background-color: #fafafa;
 }
 
+@media (prefers-color-scheme: dark){
+  html, body{
+    background-color: #1f1f1f;
+  }
+}
+
 @supports not (aspect-ratio: 1 / 1) {
   .element::before {
     float: left;

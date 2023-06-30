@@ -33,6 +33,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  color: black;
 }
 
 .life_holder{
@@ -133,6 +134,31 @@
 .restart a{
   color: #141414;
   text-decoration: none;
+}
+
+@media (prefers-color-scheme: dark){
+  .timer_holder{
+    border-bottom: solid 1px #ffffff;
+  }
+  .timer_content{
+    background-color: #fafafa;
+  }
+  .display_front{
+    border: solid 1px #fafafa;
+  }
+  .display_depth{
+    border: solid 1px #919191;
+    border-bottom: solid 1px #1f1f1f;
+  }
+  .restart a{
+    color: #fafafa;
+  }
+  .restart{
+    border-bottom: 1px dotted #fafafa;
+  }
+  .calculator_frame{
+    color: white;
+  }
 }
 
 @media only screen and (max-width: 600px) {

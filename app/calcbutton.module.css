@@ -3,6 +3,8 @@
   width: 27%;
   aspect-ratio: 1 / 1;
   margin: 3px 0px 7px 0px;
+  background-color: #fafafa;
+  color: black;
 }
 
 .button_back, .button_item, .button_front{
@@ -30,7 +32,6 @@
   font-weight: 500;
   border: none;
   transform: translateX(3px);
-  background-color: #fafafa;
 }
 
 .button_mid{
@@ -48,4 +49,11 @@
   transform: translateX(3px);
   background-image: url('/2-btn-front.svg');
   background-size: 100%;
+}
+
+@media (prefers-color-scheme: dark){
+  .button_item_holder{
+    background-color: #1f1f1f;
+    color: #fafafa;
+  }
 }

@@ -1,5 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">
-    <defs><style>.cls-1{fill:#999;}.cls-2{fill:#1f1f1f;}</style></defs>
+    <defs><style>
+    .cls-1{fill:#999;}.cls-2{fill:#1f1f1f;}
+    @media (prefers-color-scheme: dark){
+        .cls-1{fill:#b7b7b7;}.cls-2{fill:#ececec;}
+    }
+    </style></defs>
     <g id="front-thick">
         <path class="cls-1" d="M311.61,946A480.84,480.84,0,0,0,500,984H374C158.88,928.16,0,732.63,0,500S158.88,71.84,374,16H500A484.13,484.13,0,0,0,311.61,946Z"/>
         <path class="cls-2" d="M1000,500c0,219.25-141.13,405.55-337.5,473a502.5,502.5,0,0,1-325,0H500A473.13,473.13,0,0,0,684.1,64.16,469.91,469.91,0,0,0,500,27H337.5a502.5,502.5,0,0,1,325,0C858.87,94.45,1000,280.75,1000,500Z"/>

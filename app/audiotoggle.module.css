@@ -43,3 +43,9 @@
   border: solid 1px transparent;
   background-image: url("/muted.svg");
 }
+
+@media (prefers-color-scheme: dark){
+  .audio_holder{
+    border: solid 2px #c8c8c8;
+  }
+}
